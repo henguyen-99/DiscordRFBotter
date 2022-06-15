@@ -7,14 +7,17 @@ from mcstatus import JavaServer
 
 client = commands.Bot(command_prefix = '!')
 
+# Runs when bot is up and running
 @client.event
 async def on_ready():
   print(f'Successful log in as {client.user}')
 
+# Load cogs to activate types of commands
 @client.command()
 async def load(ctx, extension):
   client.load_extension(f'cogs.{extension}')
 
+# Unloads cogs to deactivate types of commands
 @client.command()
 async def unload(ctx, extension):
   client.unload_extension(f'cogs.{extension}')
@@ -58,6 +61,7 @@ async def mcstatus(ctx):
     usersConnected = [ user['name'] for user in status.raw['players']['sample'] ]
     await ctx.message.channel.send(f"Players online: {usersConnected}")
 
+# Function runs upon any message being sent to the server
 @client.event
 async def on_message(message):
   if message.author == client.user:
