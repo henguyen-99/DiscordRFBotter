@@ -15,7 +15,7 @@ class TTR(commands.Cog):
         ttrResp = request.urlopen("https://www.toontownrewritten.com/api/population")
         ttrPop = ttrResp.read().decode()
         ttrPop = json.loads(ttrPop)
-        await ctx.message.channel.send(f'Current TTR population: {ttrPop["totalPopulation"]}')
+        await ctx.message.channel.send(f'Current TTR population: **{ttrPop["totalPopulation"]}**')
 
     # Uses TTR's invasion API to get current invasion data, specifically what cogs are invading and invasion progress
     @commands.command()
@@ -24,10 +24,11 @@ class TTR(commands.Cog):
         ttrInv = ttrResp.read().decode()
         ttrInv = json.loads(ttrInv)
         if ttrInv["error"] is None:
-            invasionData = {}
+            invasionData = ""
             invasionList = ttrInv["invasions"]
             for key in ttrInv["invasions"].keys():
-                invasionData[invasionList[key]['type']] = invasionList[key]['progress']
+                invaded = f"**{invasionList[key]['type']}** at progress **{invasionList[key]['progress']}**\n"
+                invasionData += invaded
             
             await ctx.message.channel.send(f'Current invasions:\n{invasionData}')
         

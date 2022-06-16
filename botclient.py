@@ -16,11 +16,19 @@ async def on_ready():
 @client.command()
 async def load(ctx, extension):
   client.load_extension(f'cogs.{extension}')
+  await ctx.message.channel.send(f'Loaded cog extension {extension}!')
 
 # Unloads cogs to deactivate types of commands
 @client.command()
 async def unload(ctx, extension):
   client.unload_extension(f'cogs.{extension}')
+  await ctx.message.channel.send(f'Unloaded cog extension {extension}!')
+
+@client.command()
+async def reload(ctx, extension):
+  client.unload_extension(f'cogs.{extension}')
+  client.load_extension(f'cogs.{extension}')
+  await ctx.message.channel.send(f'Reloaded cog extension {extension}!')
 
 # "Parrots" back whatever arguments were given as well as reacting to the original command with an emoji.
 @client.command()
