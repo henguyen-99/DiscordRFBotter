@@ -55,7 +55,7 @@ async def yt(ctx, *, search):
 @client.command()
 async def mcstatus(ctx):
   try:
-    server = JavaServer.lookup(os.getenv('MCSERVER'))
+    server = JavaServer.lookup('localhost')
     status = server.status()
 
   except Exception as e:
