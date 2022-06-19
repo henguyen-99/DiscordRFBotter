@@ -29,13 +29,20 @@ class TTR(commands.Cog):
             
             else:
                 for district in args:
-                    districtPop = f"**{str.title(district)}** at population **{sortedDistricts[str.title(district)]}** toons\n"
+                    districtProper = str.title(district)
+                    districtPop = f"**{districtProper}** at population **{sortedDistricts[districtProper]}** toons\n"
                     populationData += districtPop
                 
                 await ctx.send(f"TTR population by selected districts:\n{populationData}")
 
         else:
             await ctx.send(f"TTR population API did not respond!")
+    
+    # Handles error in the event that an invalid district is given
+    @ttrpop.error
+    async def ttrpop_error(self, ctx, error):
+        if isinstance(error, commands.CommandInvokeError):
+            await ctx.send("Invalid district passed. Check district arguments.")
 
     # Uses TTR's invasion API to get current invasion data, specifically what cogs are invading and invasion progress
     @commands.command()
