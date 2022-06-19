@@ -37,20 +37,27 @@ async def on_command_error(ctx, error):
   # If the given command is not valid, send message notifying user.
   elif isinstance(error, commands.CommandNotFound):
     await ctx.send('Not a valid command! Please check your input command.')
+  
+  elif isinstance(error, commands.MissingPermissions):
+    print(f"{ctx.message.author} attempted to run command {ctx.message.content}")
 
 # Load cogs to activate types of commands
 @client.command()
+@commands.has_permissions(administrator = True)
 async def load(ctx, extension):
   client.load_extension(f'cogs.{extension}')
   await ctx.send(f'Loaded cog extension {extension}!')
 
 # Unloads cogs to deactivate types of commands
 @client.command()
+@commands.has_permissions(administrator = True)
 async def unload(ctx, extension):
   client.unload_extension(f'cogs.{extension}')
   await ctx.send(f'Unloaded cog extension {extension}!')
 
+#Restarts cogs
 @client.command()
+@commands.has_permissions(administrator = True)
 async def reload(ctx, extension):
   client.unload_extension(f'cogs.{extension}')
   client.load_extension(f'cogs.{extension}')
