@@ -15,8 +15,14 @@ async def on_ready():
 # Runs when there is an error caught while executing a command
 @client.event
 async def on_command_error(ctx, error):
+
+  # If a command is given with insufficient arguments, send message notifying user
   if isinstance(error, commands.MissingRequiredArgument):
     await ctx.send('Missing parameters! Make sure all parameters are given.')
+    
+  # If the given command is not valid, send message notifying user.
+  elif isinstance(error, commands.CommandNotFound):
+    await ctx.send('Not a valid command! Please check your input command.')
 
 # Load cogs to activate types of commands
 @client.command()
