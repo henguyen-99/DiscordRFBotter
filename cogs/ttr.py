@@ -11,7 +11,7 @@ class TTR(commands.Cog):
     
     # Uses TTR's population API to get the current amount of TTR players online
     @commands.command()
-    async def ttrpop(self, ctx):
+    async def ttrpop(self, ctx, *args):
         ttrResp = request.urlopen("https://www.toontownrewritten.com/api/population")
         ttrPop = ttrResp.read().decode()
         ttrPop = json.loads(ttrPop)
@@ -19,11 +19,20 @@ class TTR(commands.Cog):
             populationData = ""
             populationList = ttrPop["populationByDistrict"]
             sortedDistricts = {district: population for district, population in sorted(populationList.items())}
-            for key in sortedDistricts.keys():
-                districtPop = f"**{key}** at population **{sortedDistricts[key]}** toons\n"
-                populationData += districtPop
+
+            if not args:
+                for key in sortedDistricts.keys():
+                    districtPop = f"**{key}** at population **{sortedDistricts[key]}** toons\n"
+                    populationData += districtPop
+                
+                await ctx.send(f"Current total TTR population: **{ttrPop['totalPopulation']}**\nPopulation by district:\n{populationData}")
             
-            await ctx.send(f"Current total TTR population: **{ttrPop['totalPopulation']}**\nPopulation by district:\n{populationData}")
+            else:
+                for district in args:
+                    districtPop = f"**{str.title(district)}** at population **{sortedDistricts[str.title(district)]}** toons\n"
+                    populationData += districtPop
+                
+                await ctx.send(f"TTR population by selected districts:\n{populationData}")
 
         else:
             await ctx.send(f"TTR population API did not respond!")
