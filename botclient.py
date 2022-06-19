@@ -12,6 +12,17 @@ client = commands.Bot(command_prefix = '!')
 async def on_ready():
   print(f'Successful log in as {client.user}')
 
+# Function runs upon any message being sent to the server
+@client.event
+async def on_message(message):
+  if message.author == client.user:
+    return
+  
+  else:
+    print(f'Message received from {message.author}')
+
+  await client.process_commands(message)
+
 # Runs when there is an error caught while executing a command
 @client.event
 async def on_command_error(ctx, error):
@@ -19,7 +30,10 @@ async def on_command_error(ctx, error):
   # If a command is given with insufficient arguments, send message notifying user
   if isinstance(error, commands.MissingRequiredArgument):
     await ctx.send('Missing parameters! Make sure all parameters are given.')
-    
+  
+  elif isinstance (error, commands.TooManyArguments):
+    await ctx.send('Too many parameters! Make sure to only give the appropriate parameters.')
+
   # If the given command is not valid, send message notifying user.
   elif isinstance(error, commands.CommandNotFound):
     await ctx.send('Not a valid command! Please check your input command.')
@@ -80,17 +94,6 @@ async def mcstatus(ctx):
   if status.players.online > 0:
     usersConnected = [ user['name'] for user in status.raw['players']['sample'] ]
     await ctx.send(f"Players online: {usersConnected}")
-
-# Function runs upon any message being sent to the server
-@client.event
-async def on_message(message):
-  if message.author == client.user:
-    return
-  
-  else:
-    print(f'Message received from {message.author}')
-
-  await client.process_commands(message)
 
 if __name__ == '__main__':
   for f in os.listdir('./cogs'):
