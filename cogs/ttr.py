@@ -23,10 +23,10 @@ class TTR(commands.Cog):
                 districtPop = f"**{key}** at population **{sortedDistricts[key]}** toons\n"
                 populationData += districtPop
             
-            await ctx.message.channel.send(f"Current total TTR population: **{ttrPop['totalPopulation']}**\nPopulation by district:\n{populationData}")
+            await ctx.send(f"Current total TTR population: **{ttrPop['totalPopulation']}**\nPopulation by district:\n{populationData}")
 
         else:
-            await ctx.message.channel.send(f"TTR population API did not respond!")
+            await ctx.send(f"TTR population API did not respond!")
 
     # Uses TTR's invasion API to get current invasion data, specifically what cogs are invading and invasion progress
     @commands.command()
@@ -41,10 +41,10 @@ class TTR(commands.Cog):
                 invaded = f"**{invasionList[key]['type']}** at progress **{invasionList[key]['progress']}** cogs\n"
                 invasionData += invaded
             
-            await ctx.message.channel.send(f'Current invasions:\n{invasionData}')
+            await ctx.send(f'Current invasions:\n{invasionData}')
         
         else:
-            await ctx.message.channel.send(f'TTR invasion API responded with an error: {ttrInv["error"]}')
+            await ctx.send(f'TTR invasion API responded with an error: {ttrInv["error"]}')
 
     
 def setup(client):

@@ -12,23 +12,29 @@ client = commands.Bot(command_prefix = '!')
 async def on_ready():
   print(f'Successful log in as {client.user}')
 
+# Runs when there is an error caught while executing a command
+@client.event
+async def on_command_error(ctx, error):
+  if isinstance(error, commands.MissingRequiredArgument):
+    await ctx.send('Missing parameters! Make sure all parameters are given.')
+
 # Load cogs to activate types of commands
 @client.command()
 async def load(ctx, extension):
   client.load_extension(f'cogs.{extension}')
-  await ctx.message.channel.send(f'Loaded cog extension {extension}!')
+  await ctx.send(f'Loaded cog extension {extension}!')
 
 # Unloads cogs to deactivate types of commands
 @client.command()
 async def unload(ctx, extension):
   client.unload_extension(f'cogs.{extension}')
-  await ctx.message.channel.send(f'Unloaded cog extension {extension}!')
+  await ctx.send(f'Unloaded cog extension {extension}!')
 
 @client.command()
 async def reload(ctx, extension):
   client.unload_extension(f'cogs.{extension}')
   client.load_extension(f'cogs.{extension}')
-  await ctx.message.channel.send(f'Reloaded cog extension {extension}!')
+  await ctx.send(f'Reloaded cog extension {extension}!')
 
 # "Parrots" back whatever arguments were given as well as reacting to the original command with an emoji.
 @client.command()
@@ -43,10 +49,10 @@ async def parrot(ctx, *, phrase):
 async def yt(ctx, *, search):
   query = parse.quote_plus(search)
   YTSearch = request.urlopen(f'https://www.youtube.com/results?search_query={query}')
-  await ctx.message.channel.send(f'Finding a YouTube video of {search}...')
+  await ctx.send(f'Finding a YouTube video of {search}...')
   vidIDs = re.findall(r"watch\?v=(\S{11})", YTSearch.read().decode())
   video_link = f'https://www.youtube.com/watch?v={vidIDs[0]}'
-  await ctx.message.channel.send(video_link)
+  await ctx.send(video_link)
 
 # Check local Minecraft server status
 # Detects whether the server is online
@@ -61,13 +67,13 @@ async def mcstatus(ctx):
   except Exception as e:
     print("Exception caught:")
     print(e)
-    await ctx.message.channel.send("Unable to connect to MC server! Server is offline or otherwise unable to be reached.")
+    await ctx.send("Unable to connect to MC server! Server is offline or otherwise unable to be reached.")
     return
 
-  await ctx.message.channel.send(f'Server has {status.players.online} players and replied in {status.latency} ms.')
+  await ctx.send(f'Server has {status.players.online} players and replied in {status.latency} ms.')
   if status.players.online > 0:
     usersConnected = [ user['name'] for user in status.raw['players']['sample'] ]
-    await ctx.message.channel.send(f"Players online: {usersConnected}")
+    await ctx.send(f"Players online: {usersConnected}")
 
 # Function runs upon any message being sent to the server
 @client.event
