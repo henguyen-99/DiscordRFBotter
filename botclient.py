@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import os
 import re
+import random
 from urllib import request, parse
 from mcstatus import JavaServer
 
@@ -80,6 +81,24 @@ async def yt(ctx, *, search):
   vidIDs = re.findall(r"watch\?v=(\S{11})", YTSearch.read().decode())
   video_link = f'https://www.youtube.com/watch?v={vidIDs[0]}'
   await ctx.send(video_link)
+
+# Find a random roblox game to play
+# Generates a random 10 digit string of integers and attempts to find a game with an ID matching that string
+# If a game is not found (connecting to website returns 404 error), generate new string and try again until game found
+@client.command()
+async def randblox(ctx):
+  await ctx.send("Searching for a Roblox game...")
+  while True:
+    gameID = ''.join(random.sample('0123456789', 10))
+    gameURL = f'https://www.roblox.com/games/{gameID}'
+    try:
+      gameReq = request.urlopen(gameURL)
+    
+    except Exception:
+      continue
+
+    await ctx.send(gameURL)
+    return
 
 # Check local Minecraft server status
 # Detects whether the server is online
