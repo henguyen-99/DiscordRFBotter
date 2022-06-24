@@ -54,7 +54,7 @@ class TTR(commands.Cog):
             invasionData = ""
             invasionList = ttrInv["invasions"]
             for key in invasionList.keys():
-                invaded = f"**{invasionList[key]['type']}** at progress **{invasionList[key]['progress']}** cogs\n"
+                invaded = f"**{invasionList[key]['type']}** invasion at district **{key}** at progress **{invasionList[key]['progress']}** cogs\n"
                 invasionData += invaded
             
             await ctx.send(f'Current invasions:\n{invasionData}')
