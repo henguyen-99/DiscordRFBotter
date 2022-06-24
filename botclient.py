@@ -107,7 +107,7 @@ async def randblox(ctx):
 @client.command()
 async def mcstatus(ctx):
   try:
-    server = JavaServer.lookup('localhost')
+    server = JavaServer.lookup(os.getenv('MCSERVER'))
     status = server.status()
 
   except Exception as e:
